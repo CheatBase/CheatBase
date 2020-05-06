@@ -1,11 +1,11 @@
 select *
 from ROMs
-where romFileName like '%kemon%.gba';
+where romFileName like '%Aliens%.nds';
 
 select *
 from ROMs
-where romID = 75217;
+where romID = 78885;
 
 select *
 from ROMs
-where romSerial = 'AF6E'
+where romSerial like 'BXS%'
