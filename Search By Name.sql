@@ -1,10 +1,10 @@
 select *
 from ROMs
-where romFileName like '%Aliens%.nds';
+where romFileName like '%Akumajou%.nds';
 
 select *
 from ROMs
-where romID = 78885;
+where romID = 73709;
 
 select *
 from ROMs
