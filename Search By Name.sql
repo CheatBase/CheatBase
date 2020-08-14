@@ -1,6 +1,6 @@
 select *
 from ROMs
-where romFileName like '%Akumajou%.nds';
+where romFileName like '%Blue Dragon%.nds';
 
 select *
 from ROMs
@@ -8,4 +8,4 @@ where romID = 73709;
 
 select *
 from ROMs
-where romSerial like 'BXS%'
+where romSerial like 'BBU%'
