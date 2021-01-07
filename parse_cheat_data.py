@@ -1,4 +1,5 @@
-# This program imports the raw cheatcode data in the csv files, manipulates it to make it alphabetical and organized, then adds the data to the openvgdb.sqlite database.
+# This program imports the raw cheatcode data in the csv files, manipulates it to make it alphabetical and
+# organized, then adds the data to the openvgdb.sqlite database.
 # Copyright Noah Keck - All Rights Reserved
 
 import pandas as pd
@@ -9,7 +10,7 @@ from pathlib import Path
 # Setup database connection
 conn = sqlite3.connect("openvgdb.sqlite")
 cursor = conn.cursor()
-tmp = cursor.execute("SELECT systemShortName FROM SYSTEMS")
+cursor.execute("SELECT systemShortName FROM SYSTEMS")
 systems = []
 for sys in cursor.fetchall():
     systems.append(sys[0])
