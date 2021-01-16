@@ -2,21 +2,9 @@
 # Copyright Noah Keck - All Rights Reserved
 
 import numpy as np
+import pandas as pd
 import sqlite3
 from pathlib import Path
-
-# Builds a list of format strings to determine whether quotations are needed
-def detect_fmt(data: list) -> list:
-    fmt = [None] * len(data[0])
-    for row in data: # check every row and every column, not efficient but saves space in the csv
-        for i, val in enumerate(row):
-            if fmt[i] is None and isinstance(val, str) and "," in val:
-                # Detects to see if a comma is present
-                fmt[i] = "\"%s\""
-    for i, temp in enumerate(fmt):
-        if temp is None:
-            fmt[i] = "%s"
-    return fmt
 
 # Create directories
 dir = Path().resolve()
@@ -28,6 +16,14 @@ conn = sqlite3.connect("openvgdb.sqlite")
 cursor = conn.cursor()
 
 # Start exporting data
+for table in ["systems", "regions", "cheat_devices", "cheat_categories"]:
+    cursor.execute("SELECT * FROM " + table.upper())
+    headers = list(map(lambda x: x[0], cursor.description))
+    results = cursor.fetchall()
+    df = pd.DataFrame(results, columns=headers)
+    df.to_csv(str(dir) + "/raw_data/{}.csv".format(table.lower()), index=False, encoding="utf-8")
+
+# Get just systemID and short name for processing data that is separated by system
 cursor.execute("SELECT systemID, systemShortName FROM SYSTEMS")
 systems = cursor.fetchall()
 for system in systems:
@@ -43,13 +39,8 @@ for system in systems:
     cursor.execute(query)
     headers = ("Title", "CoverRegionName", "CoverFrontURL", "CoverBackURL", "ReferenceURL")
     data = cursor.fetchall()
-    fmt="%s"
-    if not data:
-        data = [headers]
-    else:
-        fmt = detect_fmt(data)
-        data = np.vstack(([headers], data))
-    np.savetxt(str(dir) + "/raw_data/covers/" + system[1] + ".csv", data, delimiter=',', fmt=fmt, encoding="utf-8")
+    df = pd.DataFrame(data, columns=headers)
+    df.to_csv(str(dir) + "/raw_data/covers/" + system[1] + ".csv", index=False, encoding="utf-8")
 
     # metadata
     query = """
@@ -63,22 +54,26 @@ for system in systems:
     cursor.execute(query)
     headers = ("Title", "Region", "Genres", "Description", "Developer", "Publisher", "ReleaseDate", "ReferenceURL")
     data = cursor.fetchall()
-    fmt="%s"
-    if not data:
-        data = [headers]
-    else:
-        fmt = detect_fmt(data)
-        data = np.vstack(([headers], data))
-    np.savetxt(str(dir) + "/raw_data/metadata/" + system[1] + ".csv", data, delimiter=',', fmt=fmt, encoding="utf-8")
+    df = pd.DataFrame(data, columns=headers)
+    df.to_csv(str(dir) + "/raw_data/metadata/" + system[1] + ".csv", index=False, encoding="utf-8")
 
-    # releases
-    cursor.execute("SELECT * FROM RELEASES WHERE romID in (SELECT romID FROM ROMs WHERE systemID = {sysID})".format(sysID = system[0]))
+    # releases (doesn't include releaseID or TEMP columns)
+    cursor.execute("SELECT romID, releaseTitleName, regionLocalizedID, releaseCoverFront, releaseCoverBack, releaseCoverCart, releaseCoverDisc, releaseDescription, releaseDeveloper, releasePublisher, releaseGenre, releaseDate, releaseReferenceURL, releaseReferenceImageURL FROM RELEASES WHERE romID in (SELECT romID FROM ROMs WHERE systemID = {sysID})".format(sysID = system[0]))
     headers = list(map(lambda x: x[0], cursor.description))
     data = cursor.fetchall()
-    fmt = "%s"
-    if not data:
-        data = [headers]
-    else:
-        fmt = detect_fmt(data)
-        data = np.vstack(([headers], data))
-    np.savetxt(str(dir) + "/raw_data/releases/" + system[1] + ".csv", data, delimiter=',', fmt=fmt, encoding="utf-8")
+    df = pd.DataFrame(data, columns=headers)
+    df.to_csv(str(dir) + "/raw_data/releases/" + system[1] + ".csv", index=False, encoding="utf-8")
+
+    # roms (doesn't include TEMP columns)
+    cursor.execute("SELECT romID, systemID, regionID, romHashCRC, romHashMD5, romHashSHA1, romSize, romFileName, romExtensionlessFileName, romParent, romSerial, romHeader, romLanguage, romDumpSource FROM ROMs WHERE systemID = {sysID}".format(sysID = system[0]))
+    headers = list(map(lambda x: x[0], cursor.description))
+    data = cursor.fetchall()
+    df = pd.DataFrame(data, columns=headers)
+    df.to_csv(str(dir) + "/raw_data/roms/" + system[1] + ".csv", index=False, encoding="utf-8")
+
+    # cheats (doesn't include cheatID)
+    cursor.execute("SELECT romID, cheatName, cheatActivation, cheatDescription, cheatSideEffect, cheatFolderName, cheatCategoryID, cheatCode, cheatDeviceID, cheatCredit FROM CHEATS WHERE romID in (SELECT romID FROM ROMs WHERE systemID = {sysID})".format(sysID = system[0]))
+    headers = list(map(lambda x: x[0], cursor.description))
+    data = cursor.fetchall()
+    df = pd.DataFrame(data, columns=headers)
+    df.to_csv(str(dir) + "/raw_data/cheats/" + system[1] + ".csv", index=False, encoding="utf-8")
