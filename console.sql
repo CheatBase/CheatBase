@@ -1,14 +1,14 @@
 select *
 from ROMs
-where romFileName like '%Bouken%.nds';
+where romFileName like '%Cake%.nds';
 
 select *
 from RELEASES
-where releaseTitleName like '%Blood Stone%';
+where releaseTitleName like '%Byeorui%';
 
 select *
 from ROMs
-where romID = 53864;
+where romID = 74200;
 
 select *
 from ROMs

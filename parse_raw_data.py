@@ -366,10 +366,10 @@ p = Parser()
 
 try:
     organize_all = True
-    p.parse_systems(organize=False or organize_all)
-    p.parse_regions(organize=False or organize_all)
-    p.parse_roms(organize=False or organize_all)
-    p.parse_releases(organize=False or organize_all)
+    #p.parse_systems(organize=False or organize_all)
+    #p.parse_regions(organize=False or organize_all)
+    #p.parse_roms(organize=False or organize_all)
+    #p.parse_releases(organize=False or organize_all)
     p.parse_cheats(organize=False or organize_all) # handles cheats, cheat_categories, and cheat_devices
 except Exception as err:
     print("Error detected, rolling back changes.")
