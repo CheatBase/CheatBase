@@ -8,7 +8,7 @@ from pathlib import Path
 
 # Create directories
 dir = Path().resolve()
-for folder in ["cheats", "covers", "metadata", "releases"]:
+for folder in ["cheats", "covers", "metadata", "releases", "roms"]:
     Path(str(dir) + "/raw_data/" + folder).mkdir(parents=True, exist_ok=True)
 
 # Setup database connection
