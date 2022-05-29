@@ -21,10 +21,8 @@ Then install the following packages:
 
 ```sh
 pip install numpy
-pip install pandas==1.1.5
+pip install pandas
 ```
-
-Note that version 1.2.0 of pandas is currently incompatible due to a bug in their read_csv method that leads to a silent crash.
 
 ### Usage
 
