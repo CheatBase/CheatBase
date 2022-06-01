@@ -24,6 +24,10 @@ This article is mostly to explain the setup of the database and how you can subm
 
 ### **cheatName**
 
+The **cheatName** should describe the function of the cheat as clearly as possible without exceeding more than 7 or so words. Anything more than that can be saved for the **cheatDescription** to more fully describe the cheat's function.
+
+Ideally, you should be able to read a **cheatName** and know exactly what the cheat does.
+
 ### **cheatActivation**
 
 Describes a series of buttons that or singular button that when pressed or held, activates the cheat codes function in game. Examples: "Press Select+Down to activate." and "Press and hold Select to activate."
