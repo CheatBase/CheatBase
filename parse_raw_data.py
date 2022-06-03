@@ -35,13 +35,13 @@ class Parser:
         temp = (temp, changes)
         return temp
 
-    # Using the key dictionary, updates the specied foreign key at the index keypos
+    # Using the key dictionary, updates the specified foreign key at the index keypos
     def cascade_primary_keys(matrix: list, key: dict, keypos: int) -> list:
         for arr in matrix:
             arr[keypos] = key[int(arr[keypos])]
         return matrix
 
-    def parse_systems(self, organize: bool = False):
+    def parse_systems(self, organize: bool = False, clearTable: bool = True):
         # Import data
         print("Importing systems data from file.")
         filepath = str(self.dir) + "/raw_data/systems.csv"
@@ -56,21 +56,8 @@ class Parser:
 
         # Export to openvgdb database
         print("Starting on systems table.")
-        self.cursor.execute("DROP TABLE IF EXISTS SYSTEMS")
-        query = """
-            CREATE TABLE SYSTEMS (
-                systemID INTEGER
-                    PRIMARY KEY AUTOINCREMENT,
-                systemName TEXT NOT NULL,
-                systemShortName TEXT NOT NULL,
-                systemHeaderSizeBytes INTEGER,
-                systemHashless INTEGER,
-                systemHeader INTEGER,
-                systemSerial TEXT,
-                systemOEID TEXT
-            )
-        """
-        self.cursor.execute(query)
+        if organize or clearTable:
+            self.cursor.execute("DELETE FROM SYSTEMS")
 
         # Insert data
         query = """
@@ -79,7 +66,7 @@ class Parser:
         """
         self.cursor.executemany(query, fullsystems)
 
-    def parse_regions(self, organize: bool = False):
+    def parse_regions(self, organize: bool = False, clearTable: bool = True):
         # Import data
         print("Importing regions data from file.")
         filepath = str(self.dir) + "/raw_data/regions.csv"
@@ -94,15 +81,8 @@ class Parser:
 
         # Export to openvgdb database
         print("Starting on regions table.")
-        self.cursor.execute("DROP TABLE IF EXISTS REGIONS")
-        query = """
-            CREATE TABLE REGIONS (
-                regionID INTEGER
-                    PRIMARY KEY AUTOINCREMENT,
-                regionName TEXT NOT NULL
-            )
-        """
-        self.cursor.execute(query)
+        if organize or clearTable:
+            self.cursor.execute("DELETE FROM REGIONS")
 
         # Insert data
         query = """
@@ -111,7 +91,7 @@ class Parser:
         """
         self.cursor.executemany(query, regions)
 
-    def parse_roms(self, organize: bool = False):
+    def parse_roms(self, organize: bool = False, clearTable: bool = True):
         # Import data
         print("Importing roms data from file.")
         roms = []
@@ -136,35 +116,8 @@ class Parser:
 
         # Export to openvgdb database
         print("Starting on roms table.")
-        self.cursor.execute("DROP TABLE IF EXISTS ROMs")
-        query = """
-            CREATE TABLE ROMs (
-                romID INTEGER
-            		PRIMARY KEY AUTOINCREMENT,
-            	systemID INTEGER NOT NULL,
-            	regionID INTEGER NOT NULL,
-            	romHashCRC TEXT,
-            	romHashMD5 TEXT,
-            	romHashSHA1 TEXT,
-            	romSize INTEGER,
-            	romFileName TEXT NOT NULL,
-            	romExtensionlessFileName TEXT NOT NULL,
-            	romParent TEXT,
-            	romSerial TEXT,
-            	romHeader TEXT,
-            	romLanguage TEXT,
-            	romDumpSource TEXT NOT NULL,
-            	FOREIGN KEY (systemID)
-                    REFERENCES SYSTEMS (systemID)
-                    ON UPDATE CASCADE
-                    ON DELETE RESTRICT
-                FOREIGN KEY (regionID)
-                    REFERENCES REGIONS (regionID)
-                    ON UPDATE CASCADE
-                    ON DELETE RESTRICT
-            )
-        """
-        self.cursor.execute(query)
+        if organize or clearTable:
+            self.cursor.execute("DELETE FROM ROMS")
 
         # Insert data
         query = """
@@ -173,7 +126,7 @@ class Parser:
         """
         self.cursor.executemany(query, roms)
 
-    def parse_releases(self, organize: bool = False):
+    def parse_releases(self, organize: bool = False, clearTable: bool = True):
         # Import data
         print("Importing releases data from file.")
         releases = []
@@ -193,32 +146,8 @@ class Parser:
 
         # Export to openvgdb database
         print("Starting on releases table.")
-        self.cursor.execute("DROP TABLE IF EXISTS RELEASES")
-        query = """
-            CREATE TABLE RELEASES (
-                releaseID INTEGER
-            		PRIMARY KEY AUTOINCREMENT,
-            	romID INTEGER NOT NULL,
-            	releaseTitleName TEXT NOT NULL,
-            	regionLocalizedID INTEGER NOT NULL,
-            	releaseCoverFront TEXT,
-            	releaseCoverBack TEXT,
-            	releaseCoverCart TEXT,
-            	releaseCoverDisc TEXT,
-            	releaseDescription TEXT,
-            	releaseDeveloper TEXT,
-            	releasePublisher TEXT,
-            	releaseGenre TEXT,
-            	releaseDate TEXT,
-            	releaseReferenceURL TEXT,
-            	releaseReferenceImageURL TEXT,
-            	FOREIGN KEY (romID)
-                    REFERENCES ROMs (romID)
-                    ON UPDATE CASCADE
-                    ON DELETE RESTRICT
-            )
-        """
-        self.cursor.execute(query)
+        if organize or clearTable:
+            self.cursor.execute("DELETE FROM RELEASES")
 
         # Insert data
         query = """
@@ -227,7 +156,7 @@ class Parser:
         """
         self.cursor.executemany(query, releases)
 
-    def parse_cheats(self, organize: bool = False):
+    def parse_cheats(self, organize: bool = False, clearTable: bool = True):
         # Import data
         print("Importing cheats data from file.")
         #convertkeys = {0: int, } # used for assigning the correct data types to each column
@@ -271,60 +200,9 @@ class Parser:
 
         # Export to openvgdb database
         print("Starting on cheat tables.")
-        self.cursor.executescript("DROP TABLE IF EXISTS CHEATS; DROP TABLE IF EXISTS CHEAT_DEVICES; DROP TABLE IF EXISTS CHEAT_CATEGORIES") # drop cheat tables if they exist
-        query = """
-            CREATE TABLE CHEAT_DEVICES (
-                cheatDeviceID INTEGER
-                    PRIMARY KEY AUTOINCREMENT,
-                systemID INTEGER NOT NULL,
-                cheatDeviceName TEXT NOT NULL,
-                cheatDeviceBrandName TEXT,
-                cheatDeviceFormat TEXT,
-                FOREIGN KEY (systemID)
-                    REFERENCES SYSTEMS (systemID)
-                    ON UPDATE CASCADE
-                    ON DELETE RESTRICT
-            )
-        """
-        self.cursor.execute(query)
-        query = """
-            CREATE TABLE CHEAT_CATEGORIES (
-                cheatCategoryID INTEGER
-                    PRIMARY KEY AUTOINCREMENT,
-                cheatCategory TEXT NOT NULL,
-                cheatCategoryDescription TEXT
-            )
-        """
-        self.cursor.execute(query)
-        query = """
-            CREATE TABLE CHEATS (
-                cheatID INTEGER
-                    PRIMARY KEY AUTOINCREMENT,
-                romID INTEGER NOT NULL,
-                cheatName TEXT NOT NULL,
-                cheatActivation TEXT,
-                cheatDescription TEXT,
-                cheatSideEffect TEXT,
-                cheatFolderName TEXT,
-                cheatCategoryID INTEGER NOT NULL,
-                cheatCode TEXT NOT NULL,
-                cheatDeviceID INTEGER NOT NULL,
-                cheatCredit,
-                FOREIGN KEY (romID)
-                    REFERENCES ROMs (romID)
-                    ON UPDATE CASCADE
-                    ON DELETE RESTRICT
-                FOREIGN KEY (cheatCategoryID)
-                    REFERENCES CHEAT_CATEGORIES (cheatCategoryID)
-                    ON UPDATE CASCADE
-                    ON DELETE RESTRICT
-                FOREIGN KEY (cheatDeviceID)
-                    REFERENCES CHEAT_DEVICES (cheatDeviceID)
-                    ON UPDATE CASCADE
-                    ON DELETE RESTRICT
-            )
-        """
-        self.cursor.execute(query)
+        if organize or clearTable:
+            # clear all cheat tables of all entries
+            self.cursor.executescript("DELETE FROM CHEATS; DELETE FROM CHEAT_DEVICES; DELETE FROM CHEAT_CATEGORIES")
 
         # Insert data
         query = """
@@ -371,12 +249,15 @@ try:
     #p.parse_roms(organize=False or organize_all)
     #p.parse_releases(organize=False or organize_all)
     p.parse_cheats(organize=False or organize_all) # handles cheats, cheat_categories, and cheat_devices
+    p.conn.commit()
+    
+    print("Changes committed. Now starting cleanup.")
+    p.cursor.execute("VACUUM")
+    p.conn.commit()
+    print("Cleanup completed and program successful.")
 except Exception as err:
     print("Error detected, rolling back changes.")
     p.conn.rollback()
     raise(err)
-
-p.conn.commit()
-print("Changes committed. Now starting cleanup.")
-p.cursor.execute("VACUUM")
-p.conn.commit()
+finally:
+    p.conn.close()
