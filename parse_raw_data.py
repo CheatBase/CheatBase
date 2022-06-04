@@ -58,6 +58,7 @@ class Parser:
         print("Starting on systems table.")
         if organize or clearTable:
             self.cursor.execute("DELETE FROM SYSTEMS")
+            self.cursor.execute("DELETE FROM sqlite_sequence WHERE name = 'SYSTEMS'")
 
         # Insert data
         query = """
@@ -83,6 +84,7 @@ class Parser:
         print("Starting on regions table.")
         if organize or clearTable:
             self.cursor.execute("DELETE FROM REGIONS")
+            self.cursor.execute("DELETE FROM sqlite_sequence WHERE name = 'REGIONS'")
 
         # Insert data
         query = """
@@ -118,6 +120,7 @@ class Parser:
         print("Starting on roms table.")
         if organize or clearTable:
             self.cursor.execute("DELETE FROM ROMS")
+            self.cursor.execute("DELETE FROM sqlite_sequence WHERE name = 'ROMS'")
 
         # Insert data
         query = """
@@ -148,6 +151,7 @@ class Parser:
         print("Starting on releases table.")
         if organize or clearTable:
             self.cursor.execute("DELETE FROM RELEASES")
+            self.cursor.executescript("DELETE FROM sqlite_sequence WHERE name = 'RELEASES'")
 
         # Insert data
         query = """
@@ -201,8 +205,9 @@ class Parser:
         # Export to openvgdb database
         print("Starting on cheat tables.")
         if organize or clearTable:
-            # clear all cheat tables of all entries
+            # clear all cheat tables of all entries and restart primary key sequence
             self.cursor.executescript("DELETE FROM CHEATS; DELETE FROM CHEAT_DEVICES; DELETE FROM CHEAT_CATEGORIES")
+            self.cursor.execute("DELETE FROM sqlite_sequence WHERE name IN ('CHEATS', 'CHEAT_DEVICES', 'CHEAT_CATEGORIES')")
 
         # Insert data
         query = """
