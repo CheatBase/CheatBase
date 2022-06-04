@@ -20,7 +20,7 @@ for table in ["systems", "regions", "cheat_devices", "cheat_categories"]:
     cursor.execute("SELECT * FROM " + table.upper())
     headers = list(map(lambda x: x[0], cursor.description))
     results = cursor.fetchall()
-    df = pd.DataFrame(results, columns=headers)
+    df = pd.DataFrame(results, columns=headers).drop(columns=("lastModified"))
     df.to_csv(str(dir) + "/raw_data/{}.csv".format(table.lower()), index=False, encoding="utf-8")
 
 # Get just systemID and short name for processing data that is separated by system
@@ -72,7 +72,7 @@ for system in systems:
     df.to_csv(str(dir) + "/raw_data/roms/" + system[1] + ".csv", index=False, encoding="utf-8")
 
     # cheats (doesn't include cheatID)
-    cursor.execute("SELECT romID, cheatName, cheatActivation, cheatDescription, cheatSideEffect, cheatFolderName, cheatCategoryID, cheatCode, cheatDeviceID, cheatCredit FROM CHEATS WHERE romID in (SELECT romID FROM ROMs WHERE systemID = {sysID})".format(sysID = system[0]))
+    cursor.execute("SELECT romID, cheatName, cheatActivation, cheatDescription, cheatSideEffect, cheatFolderName, cheatCategoryID, cheatCode, cheatDeviceID, cheatCredit FROM CHEATS WHERE romID IN (SELECT romID FROM ROMs WHERE systemID = {sysID})".format(sysID = system[0]))
     headers = list(map(lambda x: x[0], cursor.description))
     data = cursor.fetchall()
     df = pd.DataFrame(data, columns=headers)
