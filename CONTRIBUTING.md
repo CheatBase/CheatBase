@@ -26,7 +26,7 @@ This article is mostly to explain the setup of the database and how you can subm
 
 The **cheatName** should describe the function of the cheat as clearly as possible without exceeding more than 7 or so words. Anything more than that can be saved for the **cheatDescription** to more fully describe the cheat's function.
 
-Ideally, you should be able to read a **cheatName** and know exactly what the cheat does.
+Ideally, you should be able to read a **cheatName** and know exactly what the cheat does while remaining 50 chars or less.
 
 ### **cheatActivation**
 
