@@ -176,7 +176,7 @@ query = """
 		cheatCategoryID INTEGER NOT NULL,
 		cheatCode TEXT NOT NULL,
 		cheatDeviceID INTEGER NOT NULL,
-		cheatCredit,
+		cheatCredit TEXT,
 		lastModified DATETIME NOT NULL DEFAULT (datetime('now')),
 		FOREIGN KEY (romID)
 			REFERENCES ROMs (romID)
