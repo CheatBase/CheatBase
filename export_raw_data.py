@@ -77,3 +77,6 @@ for system in systems:
     data = cursor.fetchall()
     df = pd.DataFrame(data, columns=headers)
     df.to_csv(str(dir) + "/raw_data/cheats/" + system[1] + ".csv", index=False, encoding="utf-8")
+
+print("Export successful.")
+conn.close()
