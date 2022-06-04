@@ -52,7 +52,7 @@ This is by far the most complex aspect of the table design. This ID just links t
 
 Cheat categories exist to describe the **function** of the cheat. Meaning, what does the cheat provide for the player that uses it. For example, one of the most commonly used cheat categories is "Infinite Quantity". It applies to every cheat that has the sole purpose of giving the player an infinite quantity of items or an infinite amount of character stats (ie. Infinite Health).
 
-If the function of the cheat doesn't quite match any of the existing categories, it is perfectly within reason to create a new one.
+If the function of the cheat doesn't quite match any of the existing categories, it is perfectly within reason to create a new one. Often when choosing the category, it will be fairly obvious as certain keywords in the **cheatName** will match the **cheatCategory** name.
 
 ### **cheatCode**
 
