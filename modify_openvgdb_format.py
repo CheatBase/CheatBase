@@ -213,25 +213,22 @@ def addMissingRoms():
 	print("Now adding random missing ROM and RELEASE entries.")
 	# Starting with the ROMs
 	query = """
-		INSERT INTO ROMS (romID, systemID, regionID, romHashCRC, romHashMD5, romHashSHA1, romSize, romFileName, romExtensionlessFileName, romSerial, romLanguage, romDumpSource)
-		VALUES (86150,24,4,'CDF33AD4','58DDFF08BA51075CAF7556EDB7DD5B3B','C9A6F28D3C356810A8D2DF48C540A48A0B80263D',67108864,'007 - Blood Stone (Canada).nds','007 - Blood Stone (Canada)','BJBX','French','No-Intro')
+		INSERT INTO ROMS (romID, systemID, regionID, romHashCRC, romHashMD5, romHashSHA1, romSize, romFileName, romExtensionlessFileName, romParent, romSerial, romLanguage, romDumpSource)
+		VALUES
+  			(86150,24,4,'CDF33AD4','58DDFF08BA51075CAF7556EDB7DD5B3B','C9A6F28D3C356810A8D2DF48C540A48A0B80263D',67108864,'007 - Blood Stone (Canada).nds','007 - Blood Stone (Canada)',:null,'BJBX','French','No-Intro'),
+  			(86151,24,4,'9731CA72','77F6A9EE5FB0E8C21B74B4A51E1557B7','7EA1FDFE27EBB5C322BE620EB0938FA6E5AB07C1',67108864,'Call of Duty - Black Ops (Canada).nds','Call of Duty - Black Ops (Canada)',:null,'BDYX','French','No-Intro'),
+			(86152,24,21,'5751B16B','6766329199537C8035107AC0A901A894','420175FD7901AD3206FE4FD9AD95160C3DE1890A',67108864,'Cats & Dogs - The Revenge of Kitty Galore (USA) (En,Fr,Es).nds','Cats & Dogs - The Revenge of Kitty Galore (USA) (En,Fr,Es)','Cats & Dogs - The Revenge of Kitty Galore - The Videogame (Europe) (En,Fr,De,Es,It,Nl)','BD3E','English/French/Spanish','No-Intro')
+
 	"""
-	cursor.execute(query)	
-	query = """
-		INSERT INTO ROMS (romID, systemID, regionID, romHashCRC, romHashMD5, romHashSHA1, romSize, romFileName, romExtensionlessFileName, romSerial, romLanguage, romDumpSource)
-		VALUES (86151,24,4,'9731CA72','77F6A9EE5FB0E8C21B74B4A51E1557B7','7EA1FDFE27EBB5C322BE620EB0938FA6E5AB07C1',67108864,'Call of Duty - Black Ops (Canada).nds','Call of Duty - Black Ops (Canada)','BDYX','French','No-Intro')
-	"""
-	cursor.execute(query)
+	cursor.execute(query, {'null':None})	
 
 	# Now adding the releases
 	query = """
 		INSERT INTO RELEASES (romID, releaseTitleName, regionLocalizedID)
-		VALUES (86150,'007: Blood Stone',4)
-	"""
-	cursor.execute(query)
-	query = """
-		INSERT INTO RELEASES (romID, releaseTitleName, regionLocalizedID)
-		VALUES (86151,'Call of Duty: Black Ops',4)
+		VALUES 
+  			(86150,'007: Blood Stone',4),
+			(86151,'Call of Duty: Black Ops',4),
+			(86152,'Cats & Dogs - The Revenge of Kitty Galore',21)
 	"""
 	cursor.execute(query)
 
