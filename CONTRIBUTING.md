@@ -48,7 +48,7 @@ It can also be used in scenarios where the same cheat name should be used for **
 
 ### **cheatCategoryID**
 
-This is by far the most complex aspect of the table design. This ID just links to a name and description from the ``cheatCategories`` table.
+This is by far the most complex aspect of the table design. This ID just links to a name and description from the ``CHEAT_CATEGORIES`` table.
 
 Cheat categories exist to describe the **function** of the cheat. Meaning, what does the cheat provide for the player that uses it. For example, one of the most commonly used cheat categories is "Infinite Quantity". It applies to every cheat that has the sole purpose of giving the player an infinite quantity of items or an infinite amount of character stats (ie. Infinite Health).
 
