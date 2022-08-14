@@ -1,5 +1,5 @@
 # This program imports the raw data in the csv files, manipulates it to make it alphabetical and
-# organized, then adds the data to the openvgdb.sqlite database.
+# organized, then adds the data to the cheatbase.sqlite database.
 # Copyright Noah Keck - All Rights Reserved
 
 import pandas as pd
@@ -8,11 +8,10 @@ import sqlite3
 from pathlib import Path
 
 class Parser:
-
     def __init__(self):
         # Setup database connection
         self.dir = Path(__file__).parent.resolve()
-        self.conn = sqlite3.connect(str(self.dir) + "/openvgdb.sqlite")
+        self.conn = sqlite3.connect(str(self.dir) + "/cheatbase.sqlite")
         self.cursor = self.conn.cursor()
         self.cursor.execute("SELECT systemShortName FROM SYSTEMS")
         self.systems = []
@@ -54,7 +53,7 @@ class Parser:
             self.systems_parsekey = temp[1]
             fullsystems = temp[0] # gets the sorted matrix
 
-        # Export to openvgdb database
+        # Export to cheatbase database
         print("Starting on systems table.")
         if organize or clearTable:
             self.cursor.execute("DELETE FROM SYSTEMS")
@@ -80,7 +79,7 @@ class Parser:
             self.regions_parsekey = temp[1]
             regions = temp[0] # gets the sorted matrix
 
-        # Export to openvgdb database
+        # Export to cheatbase database
         print("Starting on regions table.")
         if organize or clearTable:
             self.cursor.execute("DELETE FROM REGIONS")
@@ -116,7 +115,7 @@ class Parser:
             self.roms_parsekey = temp[1]
             roms = temp[0] # gets the sorted matrix
 
-        # Export to openvgdb database
+        # Export to cheatbase database
         print("Starting on roms table.")
         if organize or clearTable:
             self.cursor.execute("DELETE FROM ROMS")
@@ -147,7 +146,7 @@ class Parser:
             sortr = lambda arr: (arr[0], arr[2]) # sort by romID, regionLocalizedID
             releases.sort(key=sortr)
 
-        # Export to openvgdb database
+        # Export to cheatbase database
         print("Starting on releases table.")
         if organize or clearTable:
             self.cursor.execute("DELETE FROM RELEASES")
@@ -202,7 +201,7 @@ class Parser:
             sortr = lambda arr: (arr[0], arr[8], arr[5] or "", arr[6], arr[1]) # sort by romID, cheatDeviceID, cheatFolderName, cheatCategoryID, cheatName
             allcheats.sort(key=sortr)
 
-        # Export to openvgdb database
+        # Export to cheatbase database
         print("Starting on cheat tables.")
         if organize or clearTable:
             # clear all cheat tables of all entries and restart primary key sequence
