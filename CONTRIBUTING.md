@@ -68,6 +68,8 @@ This is a name or username field that whoever supplies / created the cheat gets 
 
 The best way to add to the database, is by submitting csv files that contain all the additions made to the cheat database. I will need to also have any additional cheat categories or devices that may have been necessary to add. The most important aspect is making absolutely positive that the romID, cheatDeviceID, and cheatCategoryID all match the appropriate row.
 
+![image](https://user-images.githubusercontent.com/26331126/216419036-4e289a8f-4cb1-4cd0-86f4-ff156053cd46.png)
+
 Alternatively, you can commit directly to the SQL database. I will need to see a log of your changes or run a comparison test to create a changelog for review. 
 
 Initial accuracy and consistency of the database is important as the cheat database develops, please keep this in mind when you submit contributions.
