@@ -4,7 +4,7 @@ Here, you will find a plethora of working cheat codes for any number of retro ga
 
 ## About the cheats in the database
 
-The cheats in this database are each manually assigned a category and sometimes a cheat folder name according to a very specific set of guidelines.
+The cheats in this database are each manually assigned a category and sometimes a cheat folder name according to a very specific set of guidelines. However, I am trying to eliminate the usage of Cheat Folder Name's to better simplify the usage of the database.
 
 * Cheats only get a cheatFolderName if they meet one of the following conditions:
   * They only apply to a "minigame" found within the ROM. This is most games that market themselves as "100-in-1" or "Minigame collection."
